@@ -43,7 +43,7 @@ redis>=2.10.5
 
 celery==4.0.2
 
-
+twilio==5.7.0
 
 
 # Your custom requirements go here
