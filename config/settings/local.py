@@ -16,6 +16,7 @@ from .base import *  # noqa
 
 # DEBUG
 # ------------------------------------------------------------------------------
+ALLOWED_HOSTS = ['192.168.99.100', 'localhost', '127.0.0.1']
 DEBUG = env.bool('DJANGO_DEBUG', default=True)
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
