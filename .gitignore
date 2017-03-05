@@ -64,3 +64,5 @@ bananas/media/
 
 
 staticfiles/
+twilio_config.json
+
