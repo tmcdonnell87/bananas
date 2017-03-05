@@ -33,6 +33,8 @@ if READ_DOT_ENV_FILE:
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
+    'suit',
+
     # Default Django apps:
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,7 +60,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     # custom users app
     'bananas.users.apps.UsersConfig',
-    # Your stuff: custom apps go here
+    # Your stuff: custom apps go here,
+    'bananas.appointments.apps.AppointmentsConfig',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -273,3 +276,10 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'Bananas Message Scheduling',
+    'SHOW_REQUIRED_ASTERISK': True,
+    'CONFIRM_UNSAVED_CHANGES': True,
+    'MENU_OPEN_FIRST_CHILD': True,
+}
