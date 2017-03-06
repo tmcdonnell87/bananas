@@ -34,6 +34,7 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     'suit',
+    'django_cron',
 
     # Default Django apps:
     'django.contrib.auth',
@@ -79,6 +80,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CRON JOB CONFIGURATION
+# ------------------------------------------------------------------------------
+CRON_CLASSES = [
+    'bananas.appointments.cron.SendMessages',
+]
+
 # MIGRATIONS CONFIGURATION
 # ------------------------------------------------------------------------------
 MIGRATION_MODULES = {
@@ -100,6 +107,20 @@ FIXTURE_DIRS = (
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
 EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+# TWILIO CONFIGURATION
+# ------------------------------------------------------------------------------
+TWILIO = {
+    'account_sid': env('TWILIO_ACCOUNT_SID'),
+    'auth_token': env('TWILIO_AUTH_TOKEN'),
+    'phone_number': env('TWILIO_PHONE_NUMBER')
+}
+
+# MAILGUN CONFIGURATION
+# ------------------------------------------------------------------------------
+ANYMAIL = {
+    'MAILGUN_API_KEY': env('MAILGUN_API_KEY'),
+    'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
+}
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -260,16 +281,6 @@ LOGIN_URL = 'account_login'
 
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
-
-########## CELERY
-INSTALLED_APPS += ['bananas.taskapp.celery.CeleryConfig']
-BROKER_URL = env('CELERY_BROKER_URL', default='django://')
-if BROKER_URL == 'django://':
-    CELERY_RESULT_BACKEND = 'redis://'
-else:
-    CELERY_RESULT_BACKEND = BROKER_URL
-########## END CELERY
-
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'
