@@ -50,3 +50,5 @@ celery==4.0.2
 django-suit==0.2.24
 
 twilio
+
+requests
