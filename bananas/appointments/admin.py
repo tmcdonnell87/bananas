@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Appointment, Document, Message
+from .models import Appointment, MessageTemplate, ScheduledMessage
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
@@ -9,10 +9,11 @@ class AppointmentAdmin(admin.ModelAdmin):
         return obj.counselor.name
     counselor_name.short_description = 'Counselor'
 
-@admin.register(Document)
-class DocumentAdmin(admin.ModelAdmin):
+@admin.register(ScheduledMessage)
+class ScheduledMessageAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
+@admin.register(MessageTemplate)
+class MessageTemplateAdmin(admin.ModelAdmin):
     pass
+
