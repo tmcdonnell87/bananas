@@ -1,5 +1,10 @@
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.db import models
+from datetime import timedelta
+from django.utils import timezone
+
 
 # Create your models here.
 from ..users.models import User
@@ -33,3 +38,16 @@ class ScheduledMessage(models.Model):
     time = models.DateTimeField()
     message = models.ForeignKey(MessageTemplate, on_delete=models.deletion.PROTECT)
 
+@receiver(post_save, sender=Appointment)
+def update_scheduled_messages(sender, instance, **kwargs):
+    # Remove previous scheduled messages
+    ScheduledMessage.objects.filter(appointment=instance).delete()
+
+    # Add new scheduled messages
+    templates = MessageTemplate.objects.all()
+    current_time = timezone.now()
+    for template in templates:
+        reminder_time = instance.time - timedelta(days=template.days_before)
+        if reminder_time > current_time:
+            m = ScheduledMessage(message=template, time=reminder_time, appointment=instance)
+            m.save()
