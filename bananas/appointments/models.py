@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
@@ -7,8 +8,8 @@ from ..users.models import User
 class Appointment(models.Model):
     client_first_name = models.CharField(max_length=32)
     client_last_name = models.CharField(max_length=32)
-    client_email = models.CharField(max_length=255,null=True)
-    client_phone = models.CharField(max_length=40,null=True)
+    client_email = models.CharField(max_length=255, blank=True)
+    client_phone = models.CharField(max_length=40, blank=True)
     ENGLISH = 'EN'
     SPANISH = 'ES'
     client_language = models.CharField(
