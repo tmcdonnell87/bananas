@@ -41,11 +41,12 @@ def send_messages():
     sent_messages = 0
     failed_messages = 0
     for scheduled_message in messages_to_send:
+        message_text = get_message_text(scheduled_message)
         if scheduled_message.appointment.client_phone:
             # Send to twilio
             try:
                 send_sms(
-                    body=scheduled_message.message.text,
+                    body=message_text,
                     to_number=scheduled_message.appointment.client_phone
                 )
                 sent_messages += 1
@@ -56,7 +57,7 @@ def send_messages():
             # Send to mailgun
             try:
                 send_email(
-                    body=scheduled_message.message.text,
+                    body=message_text,
                     to_email=scheduled_message.appointment.client_email
                 )
                 sent_messages += 1
@@ -64,3 +65,21 @@ def send_messages():
                 failed_messages += 1
         scheduled_message.delete()
     return (sent_messages, failed_messages)
+
+def get_message_text(scheduled_message):
+    return scheduled_message.message.text.format(
+        client_name="{} {}".format(scheduled_message.appointment.client_first_name,
+                                   scheduled_message.appointment.client_last_name),
+        client_first_name=scheduled_message.appointment.client_first_name,
+        client_last_name=scheduled_message.appointment.client_last_name,
+        client_email=scheduled_message.appointment.client_email,
+        client_phone=scheduled_message.appointment.client_phone,
+        appointment_date=scheduled_message.appointment.time.strftime('%A, B %-d'),
+        appointment_time=scheduled_message.appointment.time.strftime('%-I:%M %p'),
+        counselor_name="{} {}".format(scheduled_message.appointment.counselor.first_name,
+                                   scheduled_message.appointment.counselor.last_name),
+        counselor_first_name=scheduled_message.appointment.counselor.first_name,
+        counselor_last_name=scheduled_message.appointment.counselor.last_name,
+        counselor_phone=scheduled_message.appointment.counselor.phone,
+        counselor_email=scheduled_message.appointment.counselor.email
+    )
