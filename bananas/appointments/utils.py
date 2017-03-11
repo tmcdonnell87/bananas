@@ -40,27 +40,27 @@ def send_messages():
     messages_to_send = ScheduledMessage.objects.filter(time__lte=datetime.now())
     sent_messages = 0
     failed_messages = 0
-    for message in messages_to_send:
-        if message.appointment.client_phone:
+    for scheduled_message in messages_to_send:
+        if scheduled_message.appointment.client_phone:
             # Send to twilio
             try:
                 send_sms(
-                    body=message.text,
-                    to_number=message.appointment.client_phone
+                    body=scheduled_message.message.text,
+                    to_number=scheduled_message.appointment.client_phone
                 )
                 sent_messages += 1
             except:
                 failed_messages += 1
 
-        elif message.appointment.client_email:
+        elif scheduled_message.appointment.client_email:
             # Send to mailgun
             try:
                 send_email(
-                    body=message.text,
-                    to_email=message.appointment.client_email
+                    body=scheduled_message.message.text,
+                    to_email=scheduled_message.appointment.client_email
                 )
                 sent_messages += 1
             except:
                 failed_messages += 1
-        message.delete()
+        scheduled_message.delete()
     return (sent_messages, failed_messages)
