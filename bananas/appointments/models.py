@@ -31,6 +31,8 @@ class MessageTemplate(models.Model):
     days_before = models.PositiveIntegerField()
     title = models.CharField(max_length=40)
     text = models.TextField(max_length=1000)
+    def __str__(self):
+        return str(self.days_before) + ' days: ' + self.title
 
 class ScheduledMessage(models.Model):
     id = models.AutoField(primary_key=True)

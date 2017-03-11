@@ -48,4 +48,7 @@ celery==4.0.2
 
 # Your custom requirements go here
 django-suit==0.2.24
+
 twilio
+
+requests

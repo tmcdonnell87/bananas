@@ -11,6 +11,13 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 @admin.register(ScheduledMessage)
 class ScheduledMessageAdmin(admin.ModelAdmin):
+    list_display = ('time', 'client_name', 'message_title')
+    def client_name(self, obj):
+        return obj.appointment.client_name
+    def message_title(self, obj):
+        return obj.message.title
+    client_name.short_description = 'Client'
+    message_title.short_description = 'Message'
     pass
 
 @admin.register(MessageTemplate)
