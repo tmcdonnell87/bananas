@@ -1,6 +1,6 @@
 from bananas.appointments.models import ScheduledMessage
-from datetime import datetime
 from django.conf import settings
+from django.utils import timezone
 import requests
 from twilio.rest import TwilioRestClient
 
@@ -37,7 +37,7 @@ def send_sms(to_number, body):
     )
 
 def send_messages():
-    messages_to_send = ScheduledMessage.objects.filter(time__lte=datetime.now())
+    messages_to_send = ScheduledMessage.objects.filter(time__lte=timezone.now())
     sent_messages = 0
     failed_messages = 0
     for scheduled_message in messages_to_send:
