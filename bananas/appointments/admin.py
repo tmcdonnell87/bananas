@@ -13,7 +13,7 @@ class AppointmentAdmin(admin.ModelAdmin):
 class ScheduledMessageAdmin(admin.ModelAdmin):
     list_display = ('time', 'client_name', 'message_title')
     def client_name(self, obj):
-        return obj.appointment.client_name
+        return "{} {}".format(obj.appointment.client_first_name, obj.appointment.client_last_name)
     def message_title(self, obj):
         return obj.message.title
     client_name.short_description = 'Client'
