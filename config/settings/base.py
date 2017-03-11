@@ -34,7 +34,6 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     'suit',
-    'django_cron',
 
     # Default Django apps:
     'django.contrib.auth',
