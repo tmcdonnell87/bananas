@@ -59,7 +59,7 @@ def send_messages():
                     body=message.text,
                     to_email=message.appointment.client_email
                 )
-                send_messages += 1
+                sent_messages += 1
             except:
                 failed_messages += 1
         message.delete()

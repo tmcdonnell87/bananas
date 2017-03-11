@@ -1,25 +1,20 @@
-# must do pip install twilio
-
-
 from twilio.rest import TwilioRestClient
-import json
+from django.conf import settings
 
-
-with open('twilio_config.json', 'r') as infile:
-    twilio_config = json.load(infile)
-
+TWILIO = dict(
+    TWILIO_ACCOUNT_SID='AC373269167f5ffccd05533fb4e860c683',
+    TWILIO_AUTH_TOKEN='457c9db470a139d2b26686b8852979b5',
+    TWILIO_PHONE_NUMBER='+19253784063'
+)
 
 twilio_client = TwilioRestClient(
-    twilio_config['account_sid'],
-    twilio_config['auth_token']
+    TWILIO['TWILIO_ACCOUNT_SID'],
+    TWILIO['TWILIO_AUTH_TOKEN']
 )
 
 def send_sms(to_number, body):
     message = twilio_client.messages.create(
         body=body,
         to=to_number,
-        from_=twilio_config['phone_number']
+        from_=TWILIO['TWILIO_PHONE_NUMBER']
     )
-
-if __name__ == '__main__':
-    send_sms('+12485203071', 'hello twilio helper works')
