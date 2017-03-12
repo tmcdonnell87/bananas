@@ -6,7 +6,8 @@ class AppointmentAdmin(admin.ModelAdmin):
     search_fields = ('time', 'client_last_name', 'client_phone')
     list_display = ('time', 'client_last_name', 'client_phone', 'counselor_name')
     def counselor_name(self, obj):
-        return obj.counselor.name
+        return "{} {}".format(
+            obj.counselor.first_name, obj.counselor.last_name)
     counselor_name.short_description = 'Counselor'
 
 @admin.register(ScheduledMessage)
