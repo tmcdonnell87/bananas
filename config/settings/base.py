@@ -315,7 +315,7 @@ SUIT_CONFIG = {
             )
         },
         {
-            'label': 'Counselors',
+            'label': 'Users',
             'url': '/admin/users/user/',
             'icon':'icon-user',
             'permissions': (
