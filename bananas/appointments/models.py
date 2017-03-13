@@ -24,6 +24,7 @@ class Appointment(models.Model):
     def __str__(self):
         return str(self.time) + '-' + str(self.client_last_name) + '-' + self.client_phone
 
+
 class MessageTemplate(models.Model):
     days_before = models.PositiveIntegerField()
     title = models.CharField(max_length=40)
@@ -31,11 +32,13 @@ class MessageTemplate(models.Model):
     def __str__(self):
         return str(self.days_before) + ' days: ' + self.title
 
+
 class ScheduledMessage(models.Model):
     id = models.AutoField(primary_key=True)
     appointment = models.ForeignKey(Appointment, on_delete=models.deletion.PROTECT)
     time = models.DateTimeField()
     message = models.ForeignKey(MessageTemplate, on_delete=models.deletion.PROTECT)
+
 
 @receiver(post_save, sender=Appointment)
 def update_scheduled_messages(sender, instance, **kwargs):

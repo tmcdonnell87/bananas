@@ -292,6 +292,7 @@ SUIT_CONFIG = {
     'SHOW_REQUIRED_ASTERISK': True,
     'CONFIRM_UNSAVED_CHANGES': True,
     'MENU_OPEN_FIRST_CHILD': True,
+    'SEARCH_URL': '/admin/appointments/appointment/',
     'MENU': (
         {
             'label': 'Appointments',
