@@ -7,9 +7,6 @@ from django.utils import timezone
 
 
 # Create your models here.
-from ..users.models import User
-
-# Create your models here.
 class Appointment(models.Model):
     client_first_name = models.CharField(max_length=32)
     client_last_name = models.CharField(max_length=32)
@@ -23,7 +20,7 @@ class Appointment(models.Model):
         max_length=2,
     )
     time = models.DateTimeField()
-    counselor = models.ForeignKey(User, on_delete=models.deletion.PROTECT)
+    counselor = models.ForeignKey('users.User', on_delete=models.deletion.PROTECT)
     def __str__(self):
         return str(self.time) + '-' + str(self.client_last_name) + '-' + self.client_phone
 

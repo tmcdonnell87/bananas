@@ -292,4 +292,36 @@ SUIT_CONFIG = {
     'SHOW_REQUIRED_ASTERISK': True,
     'CONFIRM_UNSAVED_CHANGES': True,
     'MENU_OPEN_FIRST_CHILD': True,
+    'MENU': (
+        {
+            'label': 'Appointments',
+            'url': '/admin/appointments/appointment/',
+            'icon':'icon-calendar'
+        },
+        {
+            'label': 'Messages',
+            'url': '/admin/appointments/scheduledmessage/',
+            'icon':'icon-envelope'
+        },
+        {
+            'label': 'Message Templates',
+            'url': '/admin/appointments/messagetemplate/',
+            'icon':'icon-file',
+            'permissions': (
+                'auth.add_message_template',
+                'auth.delete_message_template',
+                'auth.change_message_template'
+            )
+        },
+        {
+            'label': 'Counselors',
+            'url': '/admin/users/user/',
+            'icon':'icon-user',
+            'permissions': (
+                'auth.add_user',
+                'auth.delete_user',
+                'auth.change_user'
+            )
+        },
+    ),
 }
