@@ -22,8 +22,18 @@ class Appointment(models.Model):
     time = models.DateTimeField()
     counselor = models.ForeignKey('users.User', on_delete=models.deletion.PROTECT)
     def __str__(self):
-        return str(self.time) + '-' + str(self.client_last_name) + '-' + self.client_phone
-
+        contact = self.client_phone or self.client_email
+        return (
+            self.client_first_name +
+            ' ' +
+            self.client_last_name +
+            ' (' +
+            contact +
+            ') - ' +
+            self.time.strftime('%B %-d') +
+            ', ' +
+            self.time.strftime('%-I:%M %p')
+        )
     def clean(self):
         if not self.counselor.is_counselor:
             raise ValidationError('Only a user who is a counselor can be set as '
@@ -48,7 +58,7 @@ class MessageTemplate(models.Model):
     title = models.CharField(max_length=40)
     text = models.TextField(max_length=1000)
     def __str__(self):
-        return str(self.days_before) + ' days: ' + self.title
+        return self.title + ' (' + str(self.days_before) + ' days before)'
 
 
 class ScheduledMessage(models.Model):

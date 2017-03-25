@@ -33,7 +33,11 @@ if READ_DOT_ENV_FILE:
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
+    # Admin interface
     'suit',
+    # Search selector
+    'dal',
+    'dal_select2',
 
     # Default Django apps:
     'django.contrib.auth',

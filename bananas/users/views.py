@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-
-from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView
+from dal import autocomplete
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
-from .models import User
+from bananas.users.models import User
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -46,3 +47,21 @@ class UserListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+
+class CounselorAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated():
+            return User.objects.none()
+
+        qs = User.objects.filter(is_counselor=True)
+
+        if self.q:
+            qs = qs.filter(
+                Q(first_name__icontains=self.q) |
+                Q(last_name__icontains=self.q) |
+                Q(email__icontains=self.q)
+            )
+
+        return qs

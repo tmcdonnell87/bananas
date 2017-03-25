@@ -20,7 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 class User(AbstractUser):
     first_name = models.CharField(max_length=32, blank=True)
     last_name = models.CharField(max_length=32, blank=True)
-    email = models.CharField(max_length=255, blank=False)
+    email = models.CharField(max_length=255, blank=False, unique=True)
     phone = models.CharField(_('Phone Number'), max_length=40, blank=False)
     is_counselor = models.BooleanField(
         _('Counselor'), default=True,
@@ -33,7 +33,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return "{} {} ({})".format(
-            self.first_name, self.last_name, self.username)
+            self.first_name, self.last_name, self.email)
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})

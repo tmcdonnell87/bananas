@@ -1,5 +1,36 @@
+from dal import autocomplete
+
+from django import forms
 from django.contrib import admin
-from .models import Appointment, MessageTemplate, ScheduledMessage
+from bananas.appointments.models import (
+    Appointment,
+    MessageTemplate,
+    ScheduledMessage
+)
+
+
+class AppointmentForm(forms.ModelForm):
+
+    class Meta:
+        model = Appointment
+        fields = ('__all__')
+        widgets = {
+            'counselor': autocomplete.ModelSelect2(url='users:counselor-autocomplete')
+        }
+
+
+class ScheduledMessageForm(forms.ModelForm):
+
+    class Meta:
+        model = ScheduledMessage
+        fields = ('__all__')
+        widgets = {
+            'appointment': autocomplete.ModelSelect2(
+                url='appointments:appointment-autocomplete'),
+            'message': autocomplete.ModelSelect2(
+                url='appointments:message-template-autocomplete')
+        }
+
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
@@ -22,6 +53,7 @@ class AppointmentAdmin(admin.ModelAdmin):
         'counselor__phone',
     )
     list_filter = ('time', )
+    form = AppointmentForm
     def client_name(self, obj):
         return "{} {}".format(
             obj.client_first_name, obj.client_last_name)
@@ -51,6 +83,7 @@ class ScheduledMessageAdmin(admin.ModelAdmin):
         'message__text',
     )
     list_filter = ('time', )
+    form = ScheduledMessageForm
     def client_name(self, obj):
         return "{} {}".format(
             obj.appointment.client_first_name,

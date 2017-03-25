@@ -74,7 +74,7 @@ def get_message_text(scheduled_message):
         client_last_name=scheduled_message.appointment.client_last_name,
         client_email=scheduled_message.appointment.client_email,
         client_phone=scheduled_message.appointment.client_phone,
-        appointment_date=scheduled_message.appointment.time.strftime('%A, B %-d'),
+        appointment_date=scheduled_message.appointment.time.strftime('%A, %B %-d'),
         appointment_time=scheduled_message.appointment.time.strftime('%-I:%M %p'),
         counselor_name="{} {}".format(scheduled_message.appointment.counselor.first_name,
                                    scheduled_message.appointment.counselor.last_name),

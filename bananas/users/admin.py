@@ -5,7 +5,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from .models import User
+from bananas.users.models import User
 from django.utils.translation import ugettext_lazy as _
 
 
