@@ -15,7 +15,6 @@ whitenoise==3.3.0
 # Forms
 django-braces==1.11.0
 django-crispy-forms==1.6.1
-django-autocomplete-light==3.2.1
 
 # Models
 django-model-utils==2.6.1
@@ -47,7 +46,7 @@ redis>=2.10.5
 
 # Your custom requirements go here
 django-suit==0.2.24
-
-twilio
-
-requests
+django-autocomplete-light==3.2.1
+twilio==5.7.0
+requests==2.13.0
+google-api-python-client==1.6.2
