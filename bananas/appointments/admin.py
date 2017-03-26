@@ -7,29 +7,41 @@ from bananas.appointments.models import (
     MessageTemplate,
     ScheduledMessage
 )
+from bananas.users.models import User
 
 
 class AppointmentForm(forms.ModelForm):
+    time = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'class': 'datetime-input'}))
+    counselor = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=autocomplete.ModelSelect2(url='users:counselor-autocomplete')
+    )
 
     class Meta:
         model = Appointment
         fields = ('__all__')
-        widgets = {
-            'counselor': autocomplete.ModelSelect2(url='users:counselor-autocomplete')
-        }
 
 
 class ScheduledMessageForm(forms.ModelForm):
+    time = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'class': 'datetime-input'}))
+    appointment = forms.ModelChoiceField(
+        queryset=Appointment.objects.all(),
+        widget=autocomplete.ModelSelect2(
+            url='appointments:appointment-autocomplete'
+        )
+    )
+    message = forms.ModelChoiceField(
+        queryset=MessageTemplate.objects.all(),
+        widget=autocomplete.ModelSelect2(
+            url='appointments:message-template-autocomplete'
+        )
+    )
 
     class Meta:
         model = ScheduledMessage
         fields = ('__all__')
-        widgets = {
-            'appointment': autocomplete.ModelSelect2(
-                url='appointments:appointment-autocomplete'),
-            'message': autocomplete.ModelSelect2(
-                url='appointments:message-template-autocomplete')
-        }
 
 
 @admin.register(Appointment)
