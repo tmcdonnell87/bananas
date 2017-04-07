@@ -1,8 +1,11 @@
-from bananas.appointments.models import ScheduledMessage
+import requests
+import re
+from twilio.rest import TwilioRestClient
+
 from django.conf import settings
 from django.utils import timezone
-import requests
-from twilio.rest import TwilioRestClient
+
+from bananas.appointments.models import ScheduledMessage
 
 
 def send_email(
@@ -67,7 +70,17 @@ def send_messages():
     return (sent_messages, failed_messages)
 
 def get_message_text(scheduled_message):
-    return scheduled_message.message.text.format(
+    return re.sub(
+        # trim the whitespace between tag brackets
+        # {   example_tag   } => {example_tag}
+        r'(\{)\s*(\S+)\s*(?=})',
+        r'\1\2',
+        scheduled_message.message.text,
+        0,
+        re.MULTILINE | re.IGNORECASE
+    ).format(
+        # Fill in tags
+        # {example_tag} => example_value
         client_name="{} {}".format(scheduled_message.appointment.client_first_name,
                                    scheduled_message.appointment.client_last_name),
         client_first_name=scheduled_message.appointment.client_first_name,
@@ -83,3 +96,4 @@ def get_message_text(scheduled_message):
         counselor_phone=scheduled_message.appointment.counselor.phone,
         counselor_email=scheduled_message.appointment.counselor.email
     )
+

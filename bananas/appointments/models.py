@@ -56,7 +56,24 @@ class Appointment(models.Model):
 class MessageTemplate(models.Model):
     days_before = models.PositiveIntegerField()
     title = models.CharField(max_length=40)
-    text = models.TextField(max_length=1000)
+    text = models.TextField(
+        max_length=1000,
+        help_text='<h4>Smart Tags</h4>'
+        '<ul>'
+        '<li><code>{ client_name }</code> The first and last name of the client</li>'
+        '<li><code>{ client_first_name }</code> The first name of the client</li>'
+        '<li><code>{ client_last_name }</code> The last name of the client</li>'
+        '<li><code>{ client_email }</code> The email address of the client</li>'
+        '<li><code>{ client_phone }</code> The client\'s phone number</li>'
+        '<li><code>{ appointment_date }</code> The month, day, and year of the appointment</li>'
+        '<li><code>{ appointment_time }</code> The time of the appointment</li>'
+        '<li><code>{ counselor_name }</code> The name of the counselor assigned to the appointment</li>'
+        '<li><code>{ counselor_first_name }</code> The first name of the counselor assigned to the appointment</li>'
+        '<li><code>{ counselor_last_name }</code> The last name of the counselor assigned to the appointment</li>'
+        '<li><code>{ counselor_phone }</code> The phone number of the counselor assigned to the appointment</li>'
+        '<li><code>{ counselor_email }</code> The  email address  of the counselor assigned to the appointment</li>'
+        '</ul>'
+    )
     def __str__(self):
         return self.title + ' (' + str(self.days_before) + ' days before)'
 

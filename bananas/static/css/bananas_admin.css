@@ -2,3 +2,8 @@
 ul.breadcrumb li:nth-child(2) {
     display:none;
 }
+
+/* Space out help text list items */
+.form-horizontal .control-group .help-inline ul li {
+    margin-bottom: 5px;
+}
