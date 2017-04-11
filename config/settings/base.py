@@ -304,9 +304,19 @@ SUIT_CONFIG = {
             'icon':'icon-calendar'
         },
         {
-            'label': 'Messages',
+            'label': 'Scheduled Messages',
             'url': '/admin/appointments/scheduledmessage/',
             'icon':'icon-envelope'
+        },
+        {
+            'label': 'Appointment Types',
+            'url': '/admin/appointments/appointmenttype/',
+            'icon':'icon-book',
+            'permissions': (
+                'auth.add_appointment_type',
+                'auth.delete_appointment_type',
+                'auth.change_appointment_type'
+            )
         },
         {
             'label': 'Message Templates',

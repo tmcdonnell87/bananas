@@ -6,7 +6,13 @@ from datetime import timedelta
 from django.utils import timezone
 
 
-# Create your models here.
+class AppointmentType(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
+
+
 class Appointment(models.Model):
     client_first_name = models.CharField(max_length=32, blank=True)
     client_last_name = models.CharField(max_length=32, blank=True)
@@ -20,7 +26,14 @@ class Appointment(models.Model):
         max_length=2,
     )
     time = models.DateTimeField()
-    counselor = models.ForeignKey('users.User', on_delete=models.deletion.PROTECT)
+    counselor = models.ForeignKey(
+        'users.User', on_delete=models.deletion.PROTECT)
+    appointment_type = models.ForeignKey(
+        'appointments.AppointmentType',
+        related_name='appointments',
+        on_delete=models.deletion.PROTECT
+    )
+
     def __str__(self):
         contact = self.client_phone or self.client_email
         return (
@@ -34,6 +47,7 @@ class Appointment(models.Model):
             ', ' +
             self.time.strftime('%-I:%M %p')
         )
+
     def clean(self):
         if not self.counselor.is_counselor:
             raise ValidationError('Only a user who is a counselor can be set as '
@@ -56,24 +70,13 @@ class Appointment(models.Model):
 class MessageTemplate(models.Model):
     days_before = models.PositiveIntegerField()
     title = models.CharField(max_length=40)
-    text = models.TextField(
-        max_length=1000,
-        help_text='<h4>Smart Tags</h4>'
-        '<ul>'
-        '<li><code>{ client_name }</code> The first and last name of the client</li>'
-        '<li><code>{ client_first_name }</code> The first name of the client</li>'
-        '<li><code>{ client_last_name }</code> The last name of the client</li>'
-        '<li><code>{ client_email }</code> The email address of the client</li>'
-        '<li><code>{ client_phone }</code> The client\'s phone number</li>'
-        '<li><code>{ appointment_date }</code> The month, day, and year of the appointment</li>'
-        '<li><code>{ appointment_time }</code> The time of the appointment</li>'
-        '<li><code>{ counselor_name }</code> The name of the counselor assigned to the appointment</li>'
-        '<li><code>{ counselor_first_name }</code> The first name of the counselor assigned to the appointment</li>'
-        '<li><code>{ counselor_last_name }</code> The last name of the counselor assigned to the appointment</li>'
-        '<li><code>{ counselor_phone }</code> The phone number of the counselor assigned to the appointment</li>'
-        '<li><code>{ counselor_email }</code> The  email address  of the counselor assigned to the appointment</li>'
-        '</ul>'
+    text = models.TextField(max_length=1000)
+    appointment_type = models.ForeignKey(
+        'appointments.AppointmentType',
+        related_name='message_templates',
+        on_delete=models.deletion.PROTECT
     )
+
     def __str__(self):
         return self.title + ' (' + str(self.days_before) + ' days before)'
 
@@ -82,7 +85,16 @@ class ScheduledMessage(models.Model):
     id = models.AutoField(primary_key=True)
     appointment = models.ForeignKey(Appointment, on_delete=models.deletion.PROTECT)
     time = models.DateTimeField()
-    message = models.ForeignKey(MessageTemplate, on_delete=models.deletion.PROTECT)
+    message = models.ForeignKey(
+        MessageTemplate,
+        on_delete=models.deletion.PROTECT,
+    )
+
+    def clean(self):
+        if self.appointment.appointment_type != self.message.appointment_type:
+            raise ValidationError("A scheduled message's template must have the same "
+                                  "appointment type as the scheduled message's appointment.")
+        return super(ScheduledMessage, self).clean()
 
 
 @receiver(post_save, sender=Appointment)
@@ -91,7 +103,7 @@ def update_scheduled_messages(sender, instance, **kwargs):
     ScheduledMessage.objects.filter(appointment=instance).delete()
 
     # Add new scheduled messages
-    templates = MessageTemplate.objects.all()
+    templates = MessageTemplate.objects.filter(appointment_type=instance.appointment_type)
     current_time = timezone.now()
     for template in templates:
         reminder_time = instance.time - timedelta(days=template.days_before)

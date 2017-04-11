@@ -10,6 +10,11 @@ urlpatterns = [
         name='appointment-autocomplete',
     ),
     url(
+        regex=r'^appointment-type-autocomplete/$',
+        view=views.AppointmentTypeAutocomplete.as_view(),
+        name='appointment-type-autocomplete',
+    ),
+    url(
         regex=r'^message-template-autocomplete/$',
         view=views.MessageTemplateAutocomplete.as_view(),
         name='message-template-autocomplete',

@@ -7,3 +7,8 @@ ul.breadcrumb li:nth-child(2) {
 .form-horizontal .control-group .help-inline ul li {
     margin-bottom: 5px;
 }
+
+/* Display Flatpicker Inputs as Editable */
+.datetime-input.flatpickr-input[readonly] {
+    background-color: #fff;
+}

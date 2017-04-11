@@ -28,7 +28,8 @@ class User(AbstractUser):
     )
     is_superuser = models.BooleanField(
         _('Superuser'), default=False,
-       help_text='Superusers can edit other users and message templates.'
+       help_text='Superusers can edit message templates, appointment types, '
+                 'and other users.'
     )
 
     def __str__(self):
