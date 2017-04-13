@@ -1,4 +1,5 @@
 /* Hide app-level breadcrumb */
+div.breadcrumb li:nth-child(2),
 ul.breadcrumb li:nth-child(2) {
     display:none;
 }

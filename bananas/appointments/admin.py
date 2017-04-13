@@ -136,8 +136,8 @@ class ScheduledMessageAdmin(admin.ModelAdmin):
         'appointment__client_last_name',
         'appointment__client_email',
         'appointment__client_phone',
-        'appointment__counselor_first_name',
-        'appointment__counselor_last_name',
+        'appointment__counselor__first_name',
+        'appointment__counselor__last_name',
         'message__title',
         'message__text',
     )

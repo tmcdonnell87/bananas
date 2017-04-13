@@ -53,7 +53,7 @@ class MyUserAdmin(AuthUserAdmin):
         'email',
         'phone',
     )
-    list_filter = ('is_superuser', )
+    list_filter = ('is_superuser', 'is_counselor')
     fieldsets = (
         ('Login Info', {
             'fields': (

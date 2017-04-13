@@ -83,17 +83,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CRON JOB CONFIGURATION
-# ------------------------------------------------------------------------------
-CRON_CLASSES = [
-    'bananas.appointments.cron.SendMessages',
-]
-
-# MIGRATIONS CONFIGURATION
-# ------------------------------------------------------------------------------
-MIGRATION_MODULES = {
-    'sites': 'bananas.contrib.sites.migrations'
-}
 
 # DEBUG
 # ------------------------------------------------------------------------------
@@ -199,6 +188,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Your stuff: custom template context processors go here
             ],
+            'libraries': {
+                'admin_extras': 'bananas.templatetags.admin_extras',
+            },
         },
     },
 ]
@@ -286,7 +278,7 @@ LOGIN_URL = 'account_login'
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
-ADMIN_URL = r'^admin/'
+ADMIN_URL = r'^'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
@@ -296,21 +288,22 @@ SUIT_CONFIG = {
     'SHOW_REQUIRED_ASTERISK': True,
     'CONFIRM_UNSAVED_CHANGES': True,
     'MENU_OPEN_FIRST_CHILD': True,
-    'SEARCH_URL': '/admin/appointments/appointment/',
+    'HEADER_TIME_FORMAT': 'g:i a',
+    'SEARCH_URL': '',
     'MENU': (
         {
             'label': 'Appointments',
-            'url': '/admin/appointments/appointment/',
+            'url': '/appointments/appointment/',
             'icon':'icon-calendar'
         },
         {
             'label': 'Scheduled Messages',
-            'url': '/admin/appointments/scheduledmessage/',
+            'url': '/appointments/scheduledmessage/',
             'icon':'icon-envelope'
         },
         {
             'label': 'Appointment Types',
-            'url': '/admin/appointments/appointmenttype/',
+            'url': '/appointments/appointmenttype/',
             'icon':'icon-book',
             'permissions': (
                 'auth.add_appointment_type',
@@ -320,7 +313,7 @@ SUIT_CONFIG = {
         },
         {
             'label': 'Message Templates',
-            'url': '/admin/appointments/messagetemplate/',
+            'url': '/appointments/messagetemplate/',
             'icon':'icon-file',
             'permissions': (
                 'auth.add_message_template',
@@ -330,7 +323,7 @@ SUIT_CONFIG = {
         },
         {
             'label': 'Users',
-            'url': '/admin/users/user/',
+            'url': '/users/user/',
             'icon':'icon-user',
             'permissions': (
                 'auth.add_user',
@@ -340,3 +333,8 @@ SUIT_CONFIG = {
         },
     ),
 }
+
+HOME_APPS = [
+    'Appointments',
+    'Users',
+]

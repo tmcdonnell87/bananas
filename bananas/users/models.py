@@ -36,9 +36,6 @@ class User(AbstractUser):
         return "{} {} ({})".format(
             self.first_name, self.last_name, self.email)
 
-    def get_absolute_url(self):
-        return reverse('users:detail', kwargs={'username': self.username})
-
     def clean(self):
         if (
                 (self.first_name is None or self.first_name=='') and
