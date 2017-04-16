@@ -69,6 +69,7 @@ class Appointment(models.Model):
 
 class MessageTemplate(models.Model):
     days_before = models.PositiveIntegerField()
+    send_time = models.TimeField(auto_now=False)
     title = models.CharField(max_length=40)
     text = models.TextField(max_length=1000)
     appointment_type = models.ForeignKey(
@@ -107,6 +108,13 @@ def update_scheduled_messages(sender, instance, **kwargs):
     current_time = timezone.now()
     for template in templates:
         reminder_time = instance.time - timedelta(days=template.days_before)
+        reminder_time.replace(
+            hour=template.send_time.hour,
+            minute=template.send_time.minute,
+        )
         if reminder_time > current_time:
-            m = ScheduledMessage(message=template, time=reminder_time, appointment=instance)
-            m.save()
+            ScheduledMessage.objects.create(
+                message=template,
+                time=reminder_time,
+                appointment=instance
+            )

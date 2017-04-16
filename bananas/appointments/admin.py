@@ -53,6 +53,8 @@ class ScheduledMessageForm(forms.ModelForm):
 
 class MessageTemplateForm(forms.ModelForm):
     days_before = forms.IntegerField()
+    send_time = forms.TimeField(
+        widget=forms.TimeInput(attrs={'class': 'time-input'}))
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows':'20'}),
         help_text='<h4>Smart Tags</h4>'
