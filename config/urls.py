@@ -22,6 +22,10 @@ urlpatterns = [
         r'^',
         admin.site.urls
     ),
+    url(
+        r'^',
+        include('password_reset.urls')
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

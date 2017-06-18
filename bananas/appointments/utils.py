@@ -1,43 +1,11 @@
-import requests
 import re
-from twilio.rest import TwilioRestClient
 
-from django.conf import settings
 from django.utils import timezone
 
 from bananas.appointments.models import ScheduledMessage
+from bananas.utils.messaging import send_email
+from bananas.utils.messaging import send_sms
 
-
-def send_email(
-    body,
-    subject='Bananas Appointment',
-    to_email='Tara Bartholomew <tara@bananasbunch.org>',
-    from_email='Tara Bartholomew <tara@bananasbunch.org>'
-):
-    return requests.post(
-        "https://api.mailgun.net/v3/{}/messages".format(
-            settings.ANYMAIL['MAILGUN_SENDER_DOMAIN']
-        ),
-        auth=("api", settings.ANYMAIL['MAILGUN_API_KEY']),
-        data={
-            "from": from_email,
-            "to": to_email,
-            "subject": subject,
-            "text": body
-        }
-    )
-
-twilio_client = TwilioRestClient(
-    settings.TWILIO['account_sid'],
-    settings.TWILIO['auth_token']
-)
-
-def send_sms(to_number, body):
-    message = twilio_client.messages.create(
-        body=body,
-        to=to_number,
-        from_=settings.TWILIO['phone_number']
-    )
 
 def send_messages():
     messages_to_send = ScheduledMessage.objects.filter(time__lte=timezone.now())

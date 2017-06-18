@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
+    'password_reset', # password reset via email
 ]
 
 # Apps specific for this project go here.
