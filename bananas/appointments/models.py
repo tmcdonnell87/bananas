@@ -18,12 +18,8 @@ class Appointment(models.Model):
     client_last_name = models.CharField(max_length=32, blank=True)
     client_email = models.CharField(max_length=255, blank=True)
     client_phone = models.CharField(max_length=40, blank=True)
-    ENGLISH = 'EN'
-    SPANISH = 'ES'
     client_language = models.CharField(
-        choices=((ENGLISH, 'English'), (SPANISH, 'Spanish')),
-        default=ENGLISH,
-        max_length=2,
+        max_length=16,
     )
     time = models.DateTimeField()
     counselor = models.ForeignKey(

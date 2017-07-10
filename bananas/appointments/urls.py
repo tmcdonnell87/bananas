@@ -3,6 +3,7 @@ from django.conf.urls import url
 
 from bananas.appointments import views
 
+
 urlpatterns = [
     url(
         regex=r'^appointment-autocomplete/$',

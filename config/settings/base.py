@@ -67,6 +67,7 @@ LOCAL_APPS = [
     'bananas.users.apps.UsersConfig',
     # Your stuff: custom apps go here,
     'bananas.appointments.apps.AppointmentsConfig',
+    'bananas.translation.apps.TranslationConfig',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -114,6 +115,12 @@ ANYMAIL = {
     'MAILGUN_API_KEY': env('MAILGUN_API_KEY'),
     'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
 }
+
+#GOOGLE TRANSLATE CONFIGURATION
+# ------------------------------------------------------------------------------
+GOOGLE_KEY = env('GOOGLE_KEY')
+
+
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------

@@ -8,6 +8,7 @@ from bananas.appointments.models import (
     MessageTemplate,
     ScheduledMessage
 )
+from bananas.translation.fields import LanguageField
 from bananas.users.models import User
 
 
@@ -22,6 +23,10 @@ class AppointmentForm(forms.ModelForm):
         queryset=AppointmentType.objects.all(),
         widget=autocomplete.ModelSelect2(url='appointments:appointment-type-autocomplete')
     )
+    client_language = LanguageField(
+        widget=autocomplete.ListSelect2(url='translation:language-autocomplete')
+    )
+
 
     class Meta:
         model = Appointment

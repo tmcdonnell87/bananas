@@ -3,6 +3,7 @@ import re
 from django.utils import timezone
 
 from bananas.appointments.models import ScheduledMessage
+from bananas.translation.utils import translate_text
 from bananas.utils.messaging import send_email
 from bananas.utils.messaging import send_sms
 
@@ -13,6 +14,10 @@ def send_messages():
     failed_messages = 0
     for scheduled_message in messages_to_send:
         message_text = get_message_text(scheduled_message)
+        if (scheduled_message.appointment.client_language and
+                scheduled_message.appointment.client_language != 'en'):
+            message_text = translate_text(
+                message_text, scheduled_message.appointment.client_language)
         if scheduled_message.appointment.client_phone:
             # Send to twilio
             try:

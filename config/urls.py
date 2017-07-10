@@ -19,6 +19,10 @@ urlpatterns = [
         include('bananas.users.urls', namespace='users')
     ),
     url(
+        r'^translation/',
+        include('bananas.translation.urls', namespace='translation')
+    ),
+    url(
         r'^',
         admin.site.urls
     ),
