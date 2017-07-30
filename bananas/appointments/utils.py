@@ -1,3 +1,4 @@
+import logging
 import re
 
 from django.utils import timezone
@@ -6,6 +7,9 @@ from bananas.appointments.models import ScheduledMessage
 from bananas.translation.utils import translate_text
 from bananas.utils.messaging import send_email
 from bananas.utils.messaging import send_sms
+
+
+logger = logging.getLogger(__name__)
 
 
 def send_messages():
@@ -25,8 +29,17 @@ def send_messages():
                     body=message_text,
                     to_number=scheduled_message.appointment.client_phone
                 )
+                logger.info('Sent text message "{message}" to {client}'.format(
+                    message=scheduled_message.message.title,
+                    client=scheduled_message.appointment.client_phone
+                ))
                 sent_messages += 1
             except:
+                logger.exception('Failed to send text message "{message}" '
+                                 'to {client}'.format(
+                        message=scheduled_message.message.title,
+                        client=scheduled_message.appointment.client_phone
+                    ))
                 failed_messages += 1
 
         elif scheduled_message.appointment.client_email:
@@ -36,8 +49,17 @@ def send_messages():
                     body=message_text,
                     to_email=scheduled_message.appointment.client_email
                 )
+                logger.info('Sent email "{message}" to {client}'.format(
+                    message=scheduled_message.message.title,
+                    client=scheduled_message.appointment.client_email
+                ))
                 sent_messages += 1
             except:
+                logger.exception(
+                    'Failed to send email "{message}" to {client}'.format(
+                        message=scheduled_message.message.title,
+                        client=scheduled_message.appointment.client_email
+                    ))
                 failed_messages += 1
         scheduled_message.delete()
     return (sent_messages, failed_messages)

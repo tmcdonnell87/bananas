@@ -1,9 +1,14 @@
+import logging
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import timedelta
 from django.utils import timezone
+
+
+logger = logging.getLogger(__name__)
 
 
 class AppointmentType(models.Model):
@@ -98,10 +103,15 @@ class ScheduledMessage(models.Model):
 def update_scheduled_messages(sender, instance, **kwargs):
     # Remove previous scheduled messages
     ScheduledMessage.objects.filter(appointment=instance).delete()
+    logger.info(
+        'Deleted all scheduled messages for appointment {appointment}'.format(
+            appointment=instance.id
+        ))
 
     # Add new scheduled messages
     templates = MessageTemplate.objects.filter(appointment_type=instance.appointment_type)
     current_time = timezone.now()
+    created_messages = 0
     for template in templates:
         reminder_time = instance.time - timedelta(days=template.days_before)
         reminder_time.replace(
@@ -114,3 +124,9 @@ def update_scheduled_messages(sender, instance, **kwargs):
                 time=reminder_time,
                 appointment=instance
             )
+            created_messages += 1
+    logger.info('Created {count} scheduled messages for '
+                'appointment {appointment}'.format(
+                    count=created_messages,
+                    appointment=instance.id
+                ))
