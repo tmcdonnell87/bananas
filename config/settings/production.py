@@ -14,6 +14,13 @@ from boto.s3.connection import OrdinaryCallingFormat
 from django.utils import six
 
 
+from .base import (  # Import by name for pep8
+    DATABASES,
+    INSTALLED_APPS,
+    MIDDLEWARE,
+    TEMPLATES,
+    env
+)
 from .base import *  # noqa
 
 # SECRET CONFIGURATION
@@ -44,10 +51,10 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     'DJANGO_SECURE_CONTENT_TYPE_NOSNIFF', default=True)
 SECURE_BROWSER_XSS_FILTER = True
-#SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT', default=True)
-#CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
 
@@ -71,7 +78,7 @@ INSTALLED_APPS += ['storages', ]
 AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID', default=None)
 AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY', default=None)
 AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME', default=None)
-#AWS_AUTO_CREATE_BUCKET = True
+# AWS_AUTO_CREATE_BUCKET = True
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 
@@ -143,7 +150,6 @@ CACHES = {
         }
     }
 }
-
 
 
 # Custom Admin URL, use {% url 'admin:index' %}

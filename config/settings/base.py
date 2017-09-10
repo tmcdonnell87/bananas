@@ -58,15 +58,16 @@ THIRD_PARTY_APPS = [
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
-    'password_reset', # password reset via email
+    'password_reset',  # password reset via email
 ]
 
 # Apps specific for this project go here.
 LOCAL_APPS = [
     # custom users app
-    'bananas.users.apps.UsersConfig',
+    'bananas.user.apps.UsersConfig',
     # Your stuff: custom apps go here,
-    'bananas.appointments.apps.AppointmentsConfig',
+    'bananas.appointment.apps.AppointmentConfig',
+    'bananas.message.apps.MessageConfig',
     'bananas.translation.apps.TranslationConfig',
 ]
 
@@ -116,10 +117,9 @@ ANYMAIL = {
     'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
 }
 
-#GOOGLE TRANSLATE CONFIGURATION
+# GOOGLE TRANSLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 GOOGLE_KEY = env('GOOGLE_KEY')
-
 
 
 # MANAGER CONFIGURATION
@@ -273,13 +273,13 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
-ACCOUNT_ADAPTER = 'bananas.users.adapters.AccountAdapter'
-SOCIALACCOUNT_ADAPTER = 'bananas.users.adapters.SocialAccountAdapter'
+ACCOUNT_ADAPTER = 'bananas.user.adapters.AccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'bananas.user.adapters.SocialAccountAdapter'
 
 # Custom user app defaults
 # Select the correct user model
-AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = 'users:redirect'
+AUTH_USER_MODEL = 'user.User'
+LOGIN_REDIRECT_URL = 'user:redirect'
 LOGIN_URL = 'account_login'
 
 # SLUGLIFIER
@@ -298,18 +298,18 @@ SUIT_CONFIG = {
     'MENU': (
         {
             'label': 'Appointments',
-            'url': '/appointments/appointment/',
-            'icon':'icon-calendar'
+            'url': '/appointment/appointment/',
+            'icon': 'icon-calendar'
         },
         {
             'label': 'Scheduled Messages',
-            'url': '/appointments/scheduledmessage/',
-            'icon':'icon-envelope'
+            'url': '/message/scheduledmessage/',
+            'icon': 'icon-envelope'
         },
         {
             'label': 'Appointment Types',
-            'url': '/appointments/appointmenttype/',
-            'icon':'icon-book',
+            'url': '/appointment/appointmenttype/',
+            'icon': 'icon-book',
             'permissions': (
                 'auth.add_appointment_type',
                 'auth.delete_appointment_type',
@@ -318,8 +318,8 @@ SUIT_CONFIG = {
         },
         {
             'label': 'Message Templates',
-            'url': '/appointments/messagetemplate/',
-            'icon':'icon-file',
+            'url': '/message/messagetemplate/',
+            'icon': 'icon-file',
             'permissions': (
                 'auth.add_message_template',
                 'auth.delete_message_template',
@@ -328,8 +328,8 @@ SUIT_CONFIG = {
         },
         {
             'label': 'Users',
-            'url': '/users/user/',
-            'icon':'icon-user',
+            'url': '/user/user/',
+            'icon': 'icon-user',
             'permissions': (
                 'auth.add_user',
                 'auth.delete_user',
@@ -340,8 +340,9 @@ SUIT_CONFIG = {
 }
 
 HOME_APPS = [
-    'Appointments',
-    'Users',
+    'Appointment',
+    'Message',
+    'User',
 ]
 
 # LOGGING CONFIGURATION

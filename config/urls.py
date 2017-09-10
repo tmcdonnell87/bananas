@@ -5,18 +5,21 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
 
 urlpatterns = [
     url(
-        r'^appointments/',
-        include('bananas.appointments.urls', namespace='appointments')
+        r'^appointment/',
+        include('bananas.appointment.urls', namespace='appointment')
     ),
     url(
-        r'^users/',
-        include('bananas.users.urls', namespace='users')
+        r'^message/',
+        include('bananas.message.urls', namespace='message')
+    ),
+    url(
+        r'^user/',
+        include('bananas.user.urls', namespace='user')
     ),
     url(
         r'^translation/',
