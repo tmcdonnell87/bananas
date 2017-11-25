@@ -1,7 +1,6 @@
 import logging
 import re
 
-from datetime import timedelta
 from django.utils import timezone
 
 from bananas.message.models import MessageTemplate
@@ -14,7 +13,7 @@ from bananas.utils.messaging import send_sms
 logger = logging.getLogger(__name__)
 
 
-def update_scheduled_messages(appointment, **kwargs):
+def update_scheduled_messages(appointment, event=None):
     # Remove previous scheduled messages
     ScheduledMessage.objects.filter(appointment=appointment).delete()
     logger.info(
@@ -23,31 +22,37 @@ def update_scheduled_messages(appointment, **kwargs):
         ))
 
     # Add new scheduled messages
-    templates = MessageTemplate.objects.filter(appointment_type=appointment.appointment_type)
+    templates = MessageTemplate.objects.filter(
+        appointment_type=appointment.appointment_type)
     current_time = timezone.now()
     created_messages = 0
+    messages_to_send = []
     for template in templates:
-        reminder_time = appointment.time - timedelta(days=template.days_before)
-        reminder_time.replace(
-            hour=template.send_time.hour,
-            minute=template.send_time.minute,
-        )
-        if reminder_time > current_time:
-            ScheduledMessage.objects.create(
+        send_now, reminder_time = template.get_send_datetime(appointment, event)
+        if (reminder_time is not None and
+                (send_now or reminder_time >= current_time)):
+            scheduled_message = ScheduledMessage.objects.create(
                 message=template,
                 time=reminder_time,
                 appointment=appointment
             )
             created_messages += 1
+            if send_now:
+                messages_to_send.append(scheduled_message)
+
     logger.info('Created {count} scheduled messages for '
                 'appointment {appointment}'.format(
                     count=created_messages,
                     appointment=appointment.id
                 ))
 
+    if messages_to_send:
+        send_messages(messages_to_send)
 
-def send_messages():
-    messages_to_send = ScheduledMessage.objects.filter(time__lte=timezone.now())
+
+def send_messages(messages_to_send=None):
+    messages_to_send = messages_to_send or\
+        ScheduledMessage.objects.filter(time__lte=timezone.now())
     sent_messages = 0
     failed_messages = 0
     for scheduled_message in messages_to_send:

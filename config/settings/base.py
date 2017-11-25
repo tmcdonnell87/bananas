@@ -120,7 +120,7 @@ ANYMAIL = {
 # GOOGLE TRANSLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 GOOGLE_KEY = env('GOOGLE_KEY')
-
+TRANSLATION_ACTIVE = env.bool('TRANSLATION_ACTIVE', default=True)
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------

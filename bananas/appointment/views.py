@@ -12,7 +12,7 @@ class AppointmentAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated():
             return Appointment.objects.none()
 
-        qs = Appointment.objects.all()
+        qs = Appointment.objects.filter(deleted=False)
 
         if self.q:
             qs = qs.filter(

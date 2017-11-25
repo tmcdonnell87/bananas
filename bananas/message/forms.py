@@ -33,9 +33,16 @@ class ScheduledMessageForm(forms.ModelForm):
 
 
 class MessageTemplateForm(forms.ModelForm):
-    days_before = forms.IntegerField()
+    send_event = forms.ChoiceField(choices=MessageTemplate.SEND_EVENTS)
     send_time = forms.TimeField(
-        widget=forms.TimeInput(attrs={'class': 'time-input'}))
+        required=False,
+        widget=forms.TimeInput(attrs={'class': 'time-input'}),
+        help_text='Sends at the time of the event, when blank'
+    )
+    send_days_offset = forms.IntegerField(
+        required=False,
+        help_text='Defaults to 0 when blank'
+    )
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': '20'}),
         help_text='<h4>Smart Tags</h4>'

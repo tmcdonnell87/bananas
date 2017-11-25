@@ -30,6 +30,10 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = ('time', )
     form = AppointmentForm
 
+    def get_queryset(self, request):
+        queryset = super(AppointmentAdmin, self).get_queryset(request)
+        return queryset.filter(deleted=False)
+
     def client_name(self, obj):
         return "{} {}".format(
             obj.client_first_name, obj.client_last_name)

@@ -57,17 +57,17 @@ class ScheduledMessageAdmin(admin.ModelAdmin):
 class MessageTemplateAdmin(admin.ModelAdmin):
     list_display = (
         'title',
-        'days_before',
+        'send_event',
+        'send_days_offset',
         'short_text',
         'appointment_type_name',
     )
     search_fields = (
         'title',
-        'days_before',
         'text',
         'appointment_type__name',
     )
-    list_filter = ('days_before', )
+    list_filter = ('send_event', )
 
     form = MessageTemplateForm
 

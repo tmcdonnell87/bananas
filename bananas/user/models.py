@@ -13,10 +13,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from bananas.appointment.models import Appointment
 from bananas.message.models import ScheduledMessage
+from bananas.utils.model_mixins import BaseModel
 
 
 @python_2_unicode_compatible
-class User(AbstractUser):
+class User(BaseModel, AbstractUser):
     first_name = models.CharField(max_length=32, blank=True)
     last_name = models.CharField(max_length=32, blank=True)
     email = models.CharField(max_length=255, blank=False, unique=True)

@@ -4,20 +4,20 @@
 {# Additional <head> content here, some extra meta tags or favicon #}
 {% block extrahead %}
  <link rel="icon" href="{{STATIC_URL}}images/favicon.ico" sizes="48x48" />
- <script src="https://unpkg.com/flatpickr@2.4.7"></script>
 {% endblock %}
 
 
 {# Additional CSS includes #}
 {% block extrastyle %}
  <link rel="stylesheet" type="text/css" href="{% static 'css/bananas_admin.css' %}" media="all">
- <link href="https://unpkg.com/flatpickr@2.4.7/dist/flatpickr.min.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="{% static 'css/flatpickr.css' %}" media="all">
 {% endblock %}
 
 
 {# Additional JS files in footer, right before </body> #}
 {% block extrajs %}
  <script type="text/javascript" src="{% static 'js/bananas.js' %}"></script>
+ <script type="text/javascript" src="{% static 'js/flatpickr.js' %}"></script>
 {% endblock %}
 
 
