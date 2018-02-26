@@ -1,10 +1,12 @@
+import json
+
+from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory
 
 from test_plus.test import TestCase
 
 from ..views import (
-    UserRedirectView,
-    UserUpdateView
+    CounselorAutocomplete
 )
 
 
@@ -15,50 +17,74 @@ class BaseUserTestCase(TestCase):
         self.factory = RequestFactory()
 
 
-class TestUserRedirectView(BaseUserTestCase):
-
-    def test_get_redirect_url(self):
-        # Instantiate the view directly. Never do this outside a test!
-        view = UserRedirectView()
-        # Generate a fake request
-        request = self.factory.get('/fake-url')
-        # Attach the user to the request
-        request.user = self.user
-        # Attach the request to the view
-        view.request = request
-        # Expect: '/users/testuser/', as that is the default username for
-        #   self.make_user()
-        self.assertEqual(
-            view.get_redirect_url(),
-            '/users/testuser/'
-        )
-
-
-class TestUserUpdateView(BaseUserTestCase):
+class TestCounselorAutocompleteView(BaseUserTestCase):
 
     def setUp(self):
-        # call BaseUserTestCase.setUp()
-        super(TestUserUpdateView, self).setUp()
-        # Instantiate the view directly. Never do this outside a test!
-        self.view = UserUpdateView()
-        # Generate a fake request
-        request = self.factory.get('/fake-url')
-        # Attach the user to the request
-        request.user = self.user
-        # Attach the request to the view
-        self.view.request = request
+        super(TestCounselorAutocompleteView, self).setUp()
+        self.view = CounselorAutocomplete.as_view()
+        self.username = 'michael@bluth.com'
+        self.user.is_counselor = True
+        self.user.first_name = 'Michael'
+        self.user.last_name = 'Bluth'
+        self.user.save()
 
-    def test_get_success_url(self):
-        # Expect: '/users/testuser/', as that is the default username for
-        #   self.make_user()
+    def test_get_counselor_suggestions_requires_authentication(self):
+        request = self.factory.get('/user/counselor-autocomplete/')
+        request.user = AnonymousUser()
+        response = self.view(request)
         self.assertEqual(
-            self.view.get_success_url(),
-            '/users/testuser/'
+            response.status_code,
+            401
         )
 
-    def test_get_object(self):
-        # Expect: self.user, as that is the request's user object
+    def test_get_counselor_suggestions(self):
+        request = self.factory.get('/user/counselor-autocomplete/')
+        request.user = self.user
+        response = self.view(request)
         self.assertEqual(
-            self.view.get_object(),
-            self.user
+            response.status_code,
+            200
+        )
+        data = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(
+            data['pagination'],
+            {
+                'more': False
+            }
+        )
+        self.assertEqual(
+            data['results'],
+            [{
+                'text': str(self.user),
+                'id': self.user.id
+            }]
+        )
+
+    def test_filter_counselor_suggestions(self):
+        counselor = self.make_user('george@bluth.com')
+        counselor.is_counselor = True
+        counselor.first_name = 'George'
+        counselor.last_name = 'Bluth'
+        counselor.save()
+        request = self.factory.get('/user/counselor-autocomplete/',
+                                   {'q': 'George Bluth'})
+        request.user = self.user
+        response = self.view(request)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+        data = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(
+            data['pagination'],
+            {
+                'more': False
+            }
+        )
+        self.assertEqual(
+            data['results'],
+            [{
+                'text': str(counselor),
+                'id': counselor.id
+            }]
         )

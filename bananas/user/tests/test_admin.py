@@ -6,29 +6,37 @@ from ..admin import MyUserCreationForm
 class TestMyUserCreationForm(TestCase):
 
     def setUp(self):
-        self.user = self.make_user('notalamode', 'notalamodespassword')
+        self.user = self.make_user('first_user', 'first_user_password')
 
     def test_clean_username_success(self):
         # Instantiate the form with a new username
         form = MyUserCreationForm({
-            'username': 'alamode',
+            'username': 'michael_bluth',
+            'first_name': 'Michael',
+            'last_name': 'Bluth',
+            'email': 'michael@bluth.com',
+            'phone': '18005556666',
             'password1': '7jefB#f@Cc7YJB]2v',
             'password2': '7jefB#f@Cc7YJB]2v',
         })
         # Run is_valid() to trigger the validation
         valid = form.is_valid()
-        self.assertTrue(valid)
+        self.assertTrue(valid, form.errors)
 
         # Run the actual clean_username method
         username = form.clean_username()
-        self.assertEqual('alamode', username)
+        self.assertEqual('michael_bluth', username)
 
     def test_clean_username_false(self):
         # Instantiate the form with the same username as self.user
         form = MyUserCreationForm({
             'username': self.user.username,
-            'password1': 'notalamodespassword',
-            'password2': 'notalamodespassword',
+            'first_name': 'Michael',
+            'last_name': 'Bluth',
+            'email': 'michael@bluth.com',
+            'phone': '18005556666',
+            'password1': '7jefB#f@Cc7YJB]2v',
+            'password2': '7jefB#f@Cc7YJB]2v',
         })
         # Run is_valid() to trigger the validation, which is going to fail
         # because the username is already taken

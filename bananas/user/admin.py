@@ -13,6 +13,15 @@ class MyUserChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = User
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+            'phone',
+            'email',
+            'is_counselor',
+            'is_superuser',
+        )
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -23,6 +32,17 @@ class MyUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+            'phone',
+            'email',
+            'is_counselor',
+            'is_superuser',
+            'password1',
+            'password2',
+        )
 
     def clean_username(self):
         username = self.cleaned_data["username"]
