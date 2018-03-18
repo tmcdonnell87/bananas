@@ -80,9 +80,9 @@ class Appointment(BaseModel):
             ' (' +
             contact +
             ') - ' +
-            self.time.strftime('%B %-d') +
+            self.time.astimezone().strftime('%B %-d') +
             ', ' +
-            self.time.strftime('%-I:%M %p')
+            self.time.astimezone().strftime('%-I:%M %p')
         )
 
     def clean(self):

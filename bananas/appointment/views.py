@@ -19,12 +19,14 @@ class AppointmentAutocomplete(autocomplete.Select2QuerySetView):
         qs = Appointment.objects.filter(deleted=False)
 
         if self.q:
-            qs = qs.filter(
-                Q(client_first_name__icontains=self.q) |
-                Q(client_last_name__icontains=self.q) |
-                Q(client_email__icontains=self.q) |
-                Q(client_phone__icontains=self.q)
-            )
+            query_filter = Q()
+            for term in self.q.split():
+                qs = qs.filter(
+                    Q(client_first_name__icontains=term) |
+                    Q(client_last_name__icontains=term) |
+                    Q(client_email__icontains=term) |
+                    Q(client_phone__icontains=term)
+                )
 
         return qs
 

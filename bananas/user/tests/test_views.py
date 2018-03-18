@@ -5,15 +5,14 @@ from django.test import RequestFactory
 
 from test_plus.test import TestCase
 
-from ..views import (
-    CounselorAutocomplete
-)
+from bananas.user.tests.factories import UserFactory
+from bananas.user.views import CounselorAutocomplete
 
 
 class BaseUserTestCase(TestCase):
 
     def setUp(self):
-        self.user = self.make_user()
+        self.user = UserFactory.create()
         self.factory = RequestFactory()
 
 
@@ -21,15 +20,13 @@ class TestCounselorAutocompleteView(BaseUserTestCase):
 
     def setUp(self):
         super(TestCounselorAutocompleteView, self).setUp()
+        self.resource = '/user/counselor-autocomplete/'
         self.view = CounselorAutocomplete.as_view()
-        self.username = 'michael@bluth.com'
         self.user.is_counselor = True
-        self.user.first_name = 'Michael'
-        self.user.last_name = 'Bluth'
         self.user.save()
 
     def test_get_counselor_suggestions_requires_authentication(self):
-        request = self.factory.get('/user/counselor-autocomplete/')
+        request = self.factory.get(self.resource)
         request.user = AnonymousUser()
         response = self.view(request)
         self.assertEqual(
@@ -38,7 +35,7 @@ class TestCounselorAutocompleteView(BaseUserTestCase):
         )
 
     def test_get_counselor_suggestions(self):
-        request = self.factory.get('/user/counselor-autocomplete/')
+        request = self.factory.get(self.resource)
         request.user = self.user
         response = self.view(request)
         self.assertEqual(
@@ -61,13 +58,9 @@ class TestCounselorAutocompleteView(BaseUserTestCase):
         )
 
     def test_filter_counselor_suggestions(self):
-        counselor = self.make_user('george@bluth.com')
-        counselor.is_counselor = True
-        counselor.first_name = 'George'
-        counselor.last_name = 'Bluth'
-        counselor.save()
-        request = self.factory.get('/user/counselor-autocomplete/',
-                                   {'q': 'George Bluth'})
+        counselor = UserFactory.create(is_counselor=True)
+        request = self.factory.get(self.resource, {'q': '{} {} {}'.format(
+            counselor.first_name, counselor.last_name, counselor.email)})
         request.user = self.user
         response = self.view(request)
         self.assertEqual(

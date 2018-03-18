@@ -385,7 +385,7 @@ LOGGING = {
         },
         'prod-console': {
             'level': 'DEBUG',
-            'filters': ['require_debug_false'],
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
