@@ -65,7 +65,6 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
     ], ],
 ]
 
-# DEBUG
+# GOOGLE TRANSLATE CONFIGURATION
 # ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = False
+TRANSLATION_ACTIVE = False

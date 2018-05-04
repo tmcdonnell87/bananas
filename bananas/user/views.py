@@ -21,7 +21,6 @@ class CounselorAutocomplete(autocomplete.Select2QuerySetView):
         qs = User.objects.filter(is_counselor=True)
 
         if self.q:
-            query_filter = Q()
             for term in self.q.split():
                 qs = qs.filter(
                     Q(first_name__icontains=term) |

@@ -1,56 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from bananas.user.models import User
 from django.utils.translation import ugettext_lazy as _
 
-
-class MyUserChangeForm(UserChangeForm):
-
-    class Meta(UserChangeForm.Meta):
-        model = User
-        fields = (
-            'username',
-            'first_name',
-            'last_name',
-            'phone',
-            'email',
-            'is_counselor',
-            'is_superuser',
-        )
-
-
-class MyUserCreationForm(UserCreationForm):
-
-    error_message = UserCreationForm.error_messages.update({
-        'duplicate_username': 'This username has already been taken.'
-    })
-
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = (
-            'username',
-            'first_name',
-            'last_name',
-            'phone',
-            'email',
-            'is_counselor',
-            'is_superuser',
-            'password1',
-            'password2',
-        )
-
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        try:
-            User.objects.get(username=username)
-        except User.DoesNotExist:
-            return username
-        raise forms.ValidationError(self.error_messages['duplicate_username'])
+from bananas.user.forms import MyUserChangeForm
+from bananas.user.forms import MyUserCreationForm
+from bananas.user.models import User
 
 
 @admin.register(User)
