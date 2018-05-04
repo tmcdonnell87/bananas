@@ -11,19 +11,19 @@ from django.views import defaults as default_views
 urlpatterns = [
     url(
         r'^appointment/',
-        include('bananas.appointment.urls', namespace='appointment')
+        include('bananas.apps.appointment.urls', namespace='appointment')
     ),
     url(
         r'^message/',
-        include('bananas.message.urls', namespace='message')
+        include('bananas.apps.message.urls', namespace='message')
     ),
     url(
         r'^user/',
-        include('bananas.user.urls', namespace='user')
+        include('bananas.apps.user.urls', namespace='user')
     ),
     url(
         r'^translation/',
-        include('bananas.translation.urls', namespace='translation')
+        include('bananas.apps.translation.urls', namespace='translation')
     ),
     url(
         r'^',

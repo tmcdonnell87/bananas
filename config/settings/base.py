@@ -64,11 +64,11 @@ THIRD_PARTY_APPS = [
 # Apps specific for this project go here.
 LOCAL_APPS = [
     # custom users app
-    'bananas.user.apps.UsersConfig',
+    'bananas.apps.user.apps.UsersConfig',
     # Your stuff: custom apps go here,
-    'bananas.appointment.apps.AppointmentConfig',
-    'bananas.message.apps.MessageConfig',
-    'bananas.translation.apps.TranslationConfig',
+    'bananas.apps.appointment.apps.AppointmentConfig',
+    'bananas.apps.message.apps.MessageConfig',
+    'bananas.apps.translation.apps.TranslationConfig',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -273,8 +273,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
-ACCOUNT_ADAPTER = 'bananas.user.adapters.AccountAdapter'
-SOCIALACCOUNT_ADAPTER = 'bananas.user.adapters.SocialAccountAdapter'
+ACCOUNT_ADAPTER = 'bananas.apps.user.adapters.AccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'bananas.apps.user.adapters.SocialAccountAdapter'
 
 # Custom user app defaults
 # Select the correct user model
